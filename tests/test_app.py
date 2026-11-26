@@ -27,6 +27,7 @@ class ApplicationRouteTests(unittest.TestCase):
             self.assertEqual(url, "https://api.github.com/users/octocat")
             return httpx.Response(
                 200,
+                request=httpx.Request("GET", url),
                 json={
                     "login": "octocat",
                     "name": "The Octocat",
@@ -68,7 +69,11 @@ class ApplicationRouteTests(unittest.TestCase):
         }
 
         async def fake_getter(url: str) -> httpx.Response:
-            return httpx.Response(200, json=responses[url])
+            return httpx.Response(
+                200,
+                request=httpx.Request("GET", url),
+                json=responses[url],
+            )
 
         with patch("app.routes.external_api.get_json_with_client", new=fake_getter):
             response = self.client.get("/external/posts/summary")
