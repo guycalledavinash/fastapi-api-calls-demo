@@ -12,6 +12,7 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(url, "https://api.github.com/users/octocat")
             return httpx.Response(
                 200,
+                request=httpx.Request("GET", url),
                 json={
                     "login": "octocat",
                     "name": "The Octocat",
@@ -41,7 +42,11 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
         }
 
         async def getter(url: str) -> httpx.Response:
-            return httpx.Response(200, json=responses[url])
+            return httpx.Response(
+                200,
+                request=httpx.Request("GET", url),
+                json=responses[url],
+            )
 
         result = await fetch_post_summaries(getter)
 
@@ -72,7 +77,11 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
         }
 
         async def getter(url: str) -> httpx.Response:
-            return httpx.Response(200, json=responses[url])
+            return httpx.Response(
+                200,
+                request=httpx.Request("GET", url),
+                json=responses[url],
+            )
 
         result = await fetch_album_summaries(getter)
 
