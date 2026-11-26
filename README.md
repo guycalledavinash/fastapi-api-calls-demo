@@ -43,3 +43,13 @@ The application listens on port `8000`; open <http://127.0.0.1:8000/docs> after 
 python -m compileall app
 python -m unittest discover -s tests
 ```
+
+## Continuous integration
+
+GitHub Actions runs the same checks on pushes and pull requests targeting `main`. The workflow tests the application on Python 3.12 and 3.13, checks installed dependency consistency with `pip check`, compiles the application and tests, and runs the complete `unittest` suite.
+
+The route-level tests use mocked upstream responses, so CI does not depend on GitHub or JSONPlaceholder being available and does not make live API requests. Run the suite locally with:
+
+```bash
+python -m unittest discover -s tests -v
+```
